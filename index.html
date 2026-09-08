@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>RizzoSports · Live</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            background: #0b0c0e;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            overflow: hidden;
+        }
+
+        .app {
+            display: flex;
+            flex-direction: column;
+            width: 100vw;
+            height: 100vh;
+            background: #0b0c0e;
+            position: relative;
+        }
+
+        /* HEADER – top right corner, shifted slightly left */
+        .header {
+            position: absolute;
+            top: 18px;
+            right: 60px;           /* was 22px → moved left (larger value = more left) */
+            z-index: 30;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: transparent;
+            pointer-events: none;
+            line-height: 0;
+        }
+
+        /* RizzoSports block – black text, yellow bg, compact */
+        .brand-box {
+            background: #f9d71c;
+            padding: 8px 18px 6px 18px;
+            border-radius: 30px 30px 0 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: auto;
+            line-height: 1.1;
+            margin-bottom: 0;
+        }
+
+        .brand-name {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: #000000;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        /* Live badge – red bg, white text, directly below */
+        .live-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: #e11d2f;
+            padding: 5px 18px 7px 18px;
+            border-radius: 0 0 30px 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            pointer-events: auto;
+            margin-top: 0;
+            line-height: 1.1;
+        }
+
+        .live-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #ffffff;
+            border-radius: 50%;
+            animation: pulse-dot 1.5s ease-in-out infinite;
+            box-shadow: 0 0 8px rgba(255, 255, 255, 0.7);
+        }
+
+        .live-text {
+            font-size: 1.0rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            line-height: 1;
+        }
+
+        @keyframes pulse-dot {
+            0% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* iframe wrapper – fills entire screen */
+        .player-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            z-index: 1;
+        }
+
+        #playerIframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+            background: #000;
+        }
+
+        /* loading placeholder */
+        .loading-placeholder {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ccc;
+            font-size: 1.0rem;
+            background: #0f1113;
+            z-index: 0;
+            pointer-events: none;
+            font-weight: 400;
+            letter-spacing: 0.5px;
+            transition: opacity 0.3s ease;
+        }
+
+        /* responsive adjustments – keep proportion and shift */
+        @media (max-width: 768px) {
+            .header {
+                top: 14px;
+                right: 40px;        /* slightly left on tablet */
+            }
+            .brand-box {
+                padding: 6px 14px 5px 14px;
+                border-radius: 24px 24px 0 0;
+            }
+            .brand-name {
+                font-size: 1.25rem;
+            }
+            .live-badge {
+                padding: 4px 14px 5px 14px;
+                border-radius: 0 0 24px 24px;
+                gap: 5px;
+            }
+            .live-text {
+                font-size: 0.85rem;
+            }
+            .live-dot {
+                width: 8px;
+                height: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                top: 10px;
+                right: 28px;        /* more left on mobile */
+            }
+            .brand-box {
+                padding: 5px 10px 4px 10px;
+                border-radius: 20px 20px 0 0;
+            }
+            .brand-name {
+                font-size: 1.0rem;
+            }
+            .live-badge {
+                padding: 3px 10px 4px 10px;
+                border-radius: 0 0 20px 20px;
+                gap: 4px;
+            }
+            .live-text {
+                font-size: 0.7rem;
+            }
+            .live-dot {
+                width: 7px;
+                height: 7px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            .header {
+                right: 18px;
+            }
+            .brand-name {
+                font-size: 0.85rem;
+            }
+            .live-text {
+                font-size: 0.6rem;
+            }
+            .brand-box {
+                padding: 4px 8px 3px 8px;
+                border-radius: 16px 16px 0 0;
+            }
+            .live-badge {
+                padding: 3px 8px 4px 8px;
+                border-radius: 0 0 16px 16px;
+                gap: 3px;
+            }
+            .live-dot {
+                width: 6px;
+                height: 6px;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="app">
+
+        <!-- TOP RIGHT CORNER: shifted slightly left -->
+        <div class="header">
+            <div class="brand-box">
+                <span class="brand-name">RizzoSports</span>
+            </div>
+            <div class="live-badge">
+                <span class="live-dot"></span>
+                <span class="live-text">Live</span>
+            </div>
+        </div>
+
+        <!-- PLAYER IFRAME -->
+        <div class="player-wrapper" id="playerWrapper">
+            <iframe id="playerIframe" 
+                    src="https://playerso.top/embed2.php?id=ptvsp" 
+                    allowfullscreen 
+                    allow="autoplay; encrypted-media; picture-in-picture" 
+                    scrolling="no" 
+                    frameborder="0">
+            </iframe>
+            <div class="loading-placeholder" id="loadingMsg">— connecting —</div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            // CHANNEL MAP – all 19 channels
+            const channels = {
+                1: { name: "A Sports HD", url: "https://playerso.top/embed2.php?id=asports" },
+                2: { name: "Willow Cricket", url: "https://playerso.top/embed2.php?id=willow" },
+                3: { name: "BT Sports", url: "https://playerso.top/embed2.php?id=crich1" },
+                4: { name: "ESPN", url: "https://playerso.top/embed2.php?id=crich2" },
+                5: { name: "SuperSport Cricket", url: "https://playerso.top/embed2.php?id=crich3" },
+                6: { name: "PTV Sports", url: "https://playerso.top/embed2.php?id=ptvsp" },
+                7: { name: "Ten Sports", url: "https://playerso.top/embed2.php?id=tensp" },
+                8: { name: "Star Sports", url: "https://playerso.top/embed2.php?id=starsp1" },
+                9: { name: "Star Sports 2", url: "https://playerso.top/embed2.php?id=starsp3" },
+                10: { name: "Star Sports 1 HD", url: "https://playerso.top/embed2.php?id=star2" },
+                11: { name: "Sky Sports 2", url: "https://playerso.top/embed2.php?id=crich2" },
+                12: { name: "Sky Sports NZ", url: "https://playerso.top/embed2.php?id=cricgo3" },
+                13: { name: "BT Sports 1", url: "https://playerso.top/embed2.php?id=crich11" },
+                14: { name: "Willow Extra", url: "https://playerso.top/embed2.php?id=willowextra" },
+                15: { name: "Fox Sports", url: "https://playerso.top/embed2.php?id=fox501" },
+                16: { name: "Sky Sports Mix", url: "https://playerso.top/embed2.php?id=skysmix" },
+                17: { name: "BT Sports 2", url: "https://playerso.top/embed2.php?id=bt2" },
+                18: { name: "Ten 1", url: "https://playerso.top/embed2.php?id=ten1" },
+                19: { name: "Ten 2", url: "https://playerso.top/embed2.php?id=ten2" }
+            };
+
+            const iframe = document.getElementById('playerIframe');
+            const loadingMsg = document.getElementById('loadingMsg');
+
+            function setChannel(channelId) {
+                const channel = channels[channelId];
+                if (!channel) {
+                    const fallback = channels[6] || channels[1];
+                    iframe.src = fallback ? fallback.url : "https://playerso.top/embed2.php?id=ptvsp";
+                    if (loadingMsg) loadingMsg.style.display = 'none';
+                    return;
+                }
+                iframe.src = channel.url;
+                if (loadingMsg) {
+                    loadingMsg.style.opacity = '0';
+                    setTimeout(() => { loadingMsg.style.display = 'none'; }, 300);
+                }
+            }
+
+            function getChannelFromHash() {
+                const hash = window.location.hash;
+                if (!hash || hash.length < 2) return null;
+                const match = hash.match(/[#&]ch=(\d+)/i);
+                if (match && match[1]) {
+                    const id = parseInt(match[1], 10);
+                    if (!isNaN(id) && id >= 1 && id <= 19) return id;
+                }
+                return null;
+            }
+
+            function loadChannelFromHash() {
+                const id = getChannelFromHash();
+                if (id !== null) {
+                    setChannel(id);
+                } else {
+                    setChannel(6);
+                    if (window.history && window.history.replaceState) {
+                        window.history.replaceState(null, '', window.location.pathname + window.location.search + '#ch=6');
+                    }
+                }
+            }
+
+            window.addEventListener('hashchange', function() {
+                const id = getChannelFromHash();
+                id !== null ? setChannel(id) : setChannel(6);
+            });
+
+            window.addEventListener('load', function() {
+                loadChannelFromHash();
+                setTimeout(() => {
+                    if (loadingMsg) {
+                        loadingMsg.style.opacity = '0';
+                        setTimeout(() => { loadingMsg.style.display = 'none'; }, 200);
+                    }
+                }, 800);
+            });
+
+            iframe.addEventListener('load', function() {
+                if (loadingMsg) {
+                    loadingMsg.style.opacity = '0';
+                    setTimeout(() => { loadingMsg.style.display = 'none'; }, 200);
+                }
+            });
+
+            loadChannelFromHash();
+        })();
+    </script>
+</body>
+</html>
