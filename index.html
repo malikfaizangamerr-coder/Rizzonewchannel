@@ -28,11 +28,11 @@
             position: relative;
         }
 
-        /* HEADER – top right corner, shifted slightly left */
+        /* HEADER – top right, shifted slightly left */
         .header {
             position: absolute;
             top: 18px;
-            right: 60px;           /* was 22px → moved left (larger value = more left) */
+            right: 60px;
             z-index: 30;
             display: flex;
             flex-direction: column;
@@ -122,6 +122,7 @@
             border: none;
             display: block;
             background: #000;
+            /* Fullscreen disabled - allowfullscreen attribute removed */
         }
 
         /* loading placeholder */
@@ -141,11 +142,11 @@
             transition: opacity 0.3s ease;
         }
 
-        /* responsive adjustments – keep proportion and shift */
+        /* responsive */
         @media (max-width: 768px) {
             .header {
                 top: 14px;
-                right: 40px;        /* slightly left on tablet */
+                right: 40px;
             }
             .brand-box {
                 padding: 6px 14px 5px 14px;
@@ -171,7 +172,7 @@
         @media (max-width: 480px) {
             .header {
                 top: 10px;
-                right: 28px;        /* more left on mobile */
+                right: 28px;
             }
             .brand-box {
                 padding: 5px 10px 4px 10px;
@@ -227,7 +228,7 @@
 <body>
     <div class="app">
 
-        <!-- TOP RIGHT CORNER: shifted slightly left -->
+        <!-- TOP RIGHT CORNER -->
         <div class="header">
             <div class="brand-box">
                 <span class="brand-name">RizzoSports</span>
@@ -238,11 +239,10 @@
             </div>
         </div>
 
-        <!-- PLAYER IFRAME -->
+        <!-- PLAYER IFRAME – allowfullscreen REMOVED (disabled) -->
         <div class="player-wrapper" id="playerWrapper">
             <iframe id="playerIframe" 
-                    src="https://playerso.top/embed2.php?id=ptvsp" 
-                    allowfullscreen 
+                    src="https://playerso.top/embed2.php?id=willow" 
                     allow="autoplay; encrypted-media; picture-in-picture" 
                     scrolling="no" 
                     frameborder="0">
@@ -253,27 +253,21 @@
 
     <script>
         (function() {
-            // CHANNEL MAP – all 19 channels
+            // =============================================================
+            // UPDATED CHANNEL LIST (exactly as requested)
+            // =============================================================
             const channels = {
-                1: { name: "A Sports HD", url: "https://playerso.top/embed2.php?id=asports" },
-                2: { name: "Willow Cricket", url: "https://playerso.top/embed2.php?id=willow" },
-                3: { name: "BT Sports", url: "https://playerso.top/embed2.php?id=crich1" },
-                4: { name: "ESPN", url: "https://playerso.top/embed2.php?id=crich2" },
-                5: { name: "SuperSport Cricket", url: "https://playerso.top/embed2.php?id=crich3" },
-                6: { name: "PTV Sports", url: "https://playerso.top/embed2.php?id=ptvsp" },
-                7: { name: "Ten Sports", url: "https://playerso.top/embed2.php?id=tensp" },
-                8: { name: "Star Sports", url: "https://playerso.top/embed2.php?id=starsp1" },
-                9: { name: "Star Sports 2", url: "https://playerso.top/embed2.php?id=starsp3" },
-                10: { name: "Star Sports 1 HD", url: "https://playerso.top/embed2.php?id=star2" },
-                11: { name: "Sky Sports 2", url: "https://playerso.top/embed2.php?id=crich2" },
-                12: { name: "Sky Sports NZ", url: "https://playerso.top/embed2.php?id=cricgo3" },
-                13: { name: "BT Sports 1", url: "https://playerso.top/embed2.php?id=crich11" },
-                14: { name: "Willow Extra", url: "https://playerso.top/embed2.php?id=willowextra" },
-                15: { name: "Fox Sports", url: "https://playerso.top/embed2.php?id=fox501" },
-                16: { name: "Sky Sports Mix", url: "https://playerso.top/embed2.php?id=skysmix" },
-                17: { name: "BT Sports 2", url: "https://playerso.top/embed2.php?id=bt2" },
-                18: { name: "Ten 1", url: "https://playerso.top/embed2.php?id=ten1" },
-                19: { name: "Ten 2", url: "https://playerso.top/embed2.php?id=ten2" }
+                1: { name: "Willow", url: "https://playerso.top/embed2.php?id=willow" },
+                2: { name: "PTV Sports", url: "https://playerso.top/embed2.php?id=ptvsp" },
+                3: { name: "Willow Extra", url: "https://playerso.top/embed2.php?id=willowextra" },
+                4: { name: "Sky Sports Cricket", url: "https://playerso.top/embed2.php?id=skysmix" },
+                5: { name: "Sky Mix", url: "https://playerso.top/embed2.php?id=skysmix" },
+                6: { name: "Star Sports 1", url: "https://playerso.top/embed2.php?id=starsp1" },
+                7: { name: "Star Hindi", url: "https://playerso.top/embed2.php?id=starsp3" },
+                8: { name: "Webcric 1", url: "https://iframeplayerforall.blogspot.com/?url=https://webcric.im/frame1.htm&m=0" },
+                9: { name: "Webcric 2", url: "https://iframeplayerforall.blogspot.com/?url=https://webcric.im/frame2.htm&m=0" },
+                10: { name: "Webcric 3", url: "https://iframeplayerforall.blogspot.com/?url=https://webcric.im/frame3.htm&m=0" },
+                11: { name: "Webcric 4", url: "https://iframeplayerforall.blogspot.com/?url=https://webcric.im/frame4.htm&m=0" }
             };
 
             const iframe = document.getElementById('playerIframe');
@@ -282,8 +276,8 @@
             function setChannel(channelId) {
                 const channel = channels[channelId];
                 if (!channel) {
-                    const fallback = channels[6] || channels[1];
-                    iframe.src = fallback ? fallback.url : "https://playerso.top/embed2.php?id=ptvsp";
+                    const fallback = channels[1];
+                    iframe.src = fallback ? fallback.url : "https://playerso.top/embed2.php?id=willow";
                     if (loadingMsg) loadingMsg.style.display = 'none';
                     return;
                 }
@@ -300,7 +294,7 @@
                 const match = hash.match(/[#&]ch=(\d+)/i);
                 if (match && match[1]) {
                     const id = parseInt(match[1], 10);
-                    if (!isNaN(id) && id >= 1 && id <= 19) return id;
+                    if (!isNaN(id) && id >= 1 && id <= 11) return id;
                 }
                 return null;
             }
@@ -310,16 +304,16 @@
                 if (id !== null) {
                     setChannel(id);
                 } else {
-                    setChannel(6);
+                    setChannel(1);
                     if (window.history && window.history.replaceState) {
-                        window.history.replaceState(null, '', window.location.pathname + window.location.search + '#ch=6');
+                        window.history.replaceState(null, '', window.location.pathname + window.location.search + '#ch=1');
                     }
                 }
             }
 
             window.addEventListener('hashchange', function() {
                 const id = getChannelFromHash();
-                id !== null ? setChannel(id) : setChannel(6);
+                id !== null ? setChannel(id) : setChannel(1);
             });
 
             window.addEventListener('load', function() {
@@ -340,6 +334,7 @@
             });
 
             loadChannelFromHash();
+            window.__channels = channels;
         })();
     </script>
 </body>
