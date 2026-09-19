@@ -28,7 +28,7 @@
             position: relative;
         }
 
-        /* HEADER – top right, shifted slightly left */
+        /* HEADER */
         .header {
             position: absolute;
             top: 18px;
@@ -42,7 +42,6 @@
             line-height: 0;
         }
 
-        /* RizzoSports block – black text, yellow bg, compact */
         .brand-box {
             background: #f9d71c;
             padding: 8px 18px 6px 18px;
@@ -65,7 +64,6 @@
             white-space: nowrap;
         }
 
-        /* Live badge – red bg, white text, directly below */
         .live-badge {
             display: flex;
             align-items: center;
@@ -105,7 +103,7 @@
             100% { opacity: 1; transform: scale(1); }
         }
 
-        /* iframe wrapper – fills entire screen */
+        /* PLAYER WRAPPER */
         .player-wrapper {
             position: absolute;
             top: 0;
@@ -122,107 +120,69 @@
             border: none;
             display: block;
             background: #000;
-            /* Fullscreen disabled - allowfullscreen attribute removed */
         }
 
-        /* loading placeholder */
-        .loading-placeholder {
+        /* ============================================= */
+        /* LOADING GIF OVERLAY — FULL SCREEN 100% x 100% */
+        /* ============================================= */
+        .loading-overlay {
             position: absolute;
-            inset: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #ccc;
-            font-size: 1.0rem;
-            background: #0f1113;
-            z-index: 0;
+            background: #000000;
+            z-index: 50;
+            opacity: 1;
+            transition: opacity 0.4s ease;
             pointer-events: none;
-            font-weight: 400;
-            letter-spacing: 0.5px;
-            transition: opacity 0.3s ease;
+            overflow: hidden;
         }
 
-        /* responsive */
+        .loading-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loading-gif {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;   /* full screen bhar dega, crop hoke */
+            display: block;
+        }
+
+        /* responsive header */
         @media (max-width: 768px) {
-            .header {
-                top: 14px;
-                right: 40px;
-            }
-            .brand-box {
-                padding: 6px 14px 5px 14px;
-                border-radius: 24px 24px 0 0;
-            }
-            .brand-name {
-                font-size: 1.25rem;
-            }
-            .live-badge {
-                padding: 4px 14px 5px 14px;
-                border-radius: 0 0 24px 24px;
-                gap: 5px;
-            }
-            .live-text {
-                font-size: 0.85rem;
-            }
-            .live-dot {
-                width: 8px;
-                height: 8px;
-            }
+            .header { top: 14px; right: 40px; }
+            .brand-box { padding: 6px 14px 5px 14px; border-radius: 24px 24px 0 0; }
+            .brand-name { font-size: 1.25rem; }
+            .live-badge { padding: 4px 14px 5px 14px; border-radius: 0 0 24px 24px; gap: 5px; }
+            .live-text { font-size: 0.85rem; }
+            .live-dot { width: 8px; height: 8px; }
         }
 
         @media (max-width: 480px) {
-            .header {
-                top: 10px;
-                right: 28px;
-            }
-            .brand-box {
-                padding: 5px 10px 4px 10px;
-                border-radius: 20px 20px 0 0;
-            }
-            .brand-name {
-                font-size: 1.0rem;
-            }
-            .live-badge {
-                padding: 3px 10px 4px 10px;
-                border-radius: 0 0 20px 20px;
-                gap: 4px;
-            }
-            .live-text {
-                font-size: 0.7rem;
-            }
-            .live-dot {
-                width: 7px;
-                height: 7px;
-            }
+            .header { top: 10px; right: 28px; }
+            .brand-box { padding: 5px 10px 4px 10px; border-radius: 20px 20px 0 0; }
+            .brand-name { font-size: 1.0rem; }
+            .live-badge { padding: 3px 10px 4px 10px; border-radius: 0 0 20px 20px; gap: 4px; }
+            .live-text { font-size: 0.7rem; }
+            .live-dot { width: 7px; height: 7px; }
         }
 
         @media (max-width: 380px) {
-            .header {
-                right: 18px;
-            }
-            .brand-name {
-                font-size: 0.85rem;
-            }
-            .live-text {
-                font-size: 0.6rem;
-            }
-            .brand-box {
-                padding: 4px 8px 3px 8px;
-                border-radius: 16px 16px 0 0;
-            }
-            .live-badge {
-                padding: 3px 8px 4px 8px;
-                border-radius: 0 0 16px 16px;
-                gap: 3px;
-            }
-            .live-dot {
-                width: 6px;
-                height: 6px;
-            }
+            .header { right: 18px; }
+            .brand-name { font-size: 0.85rem; }
+            .live-text { font-size: 0.6rem; }
+            .brand-box { padding: 4px 8px 3px 8px; border-radius: 16px 16px 0 0; }
+            .live-badge { padding: 3px 8px 4px 8px; border-radius: 0 0 16px 16px; gap: 3px; }
+            .live-dot { width: 6px; height: 6px; }
         }
 
-        ::-webkit-scrollbar {
-            display: none;
-        }
+        ::-webkit-scrollbar { display: none; }
     </style>
 </head>
 <body>
@@ -239,7 +199,7 @@
             </div>
         </div>
 
-        <!-- PLAYER IFRAME – allowfullscreen REMOVED (disabled) -->
+        <!-- PLAYER -->
         <div class="player-wrapper" id="playerWrapper">
             <iframe id="playerIframe" 
                     src="https://dns-tv.pages.dev/logo/loading.gif" 
@@ -247,17 +207,20 @@
                     scrolling="no" 
                     frameborder="0">
             </iframe>
-            <div class="loading-placeholder" id="loadingMsg">— connecting —</div>
+
+            <!-- LOADING GIF OVERLAY — FULL SCREEN -->
+            <div class="loading-overlay" id="loadingOverlay">
+                <img class="loading-gif" 
+                     src="https://cdn.pixabay.com/animation/2023/06/08/11/32/11-32-46-789_512.gif" 
+                     alt="Loading...">
+            </div>
         </div>
     </div>
 
     <script>
         (function() {
-            // =============================================================
-            // UPDATED CHANNEL LIST (exactly as requested)
-            // =============================================================
             const channels = {
-                1: { name: "Willow", url: "https://playerso.top/embedit.php?id=willwr" },
+                1: { name: "Willow", url: "https://clappertest.blogspot.com/" },
                 2: { name: "PTV Sports", url: "https://playerso.top/embed2.php?id=ptvsp" },
                 3: { name: "Willow Extra", url: "https://playerso.top/embed2.php?id=willowextra" },
                 4: { name: "Sky Sports Cricket", url: "https://playerso.top/embed2.php?id=crich12" },
@@ -271,22 +234,56 @@
             };
 
             const iframe = document.getElementById('playerIframe');
-            const loadingMsg = document.getElementById('loadingMsg');
+            const loadingOverlay = document.getElementById('loadingOverlay');
 
-            function setChannel(channelId) {
-                const channel = channels[channelId];
-                if (!channel) {
-                    const fallback = channels[1];
-                    iframe.src = fallback ? fallback.url : "https://dns-tv.pages.dev/logo/loading.gif";
-                    if (loadingMsg) loadingMsg.style.display = 'none';
-                    return;
-                }
-                iframe.src = channel.url;
-                if (loadingMsg) {
-                    loadingMsg.style.opacity = '0';
-                    setTimeout(() => { loadingMsg.style.display = 'none'; }, 300);
+            let currentLoadToken = 0;
+            let gifMinTimePassed = false;
+            let iframeLoaded = false;
+
+            function showLoadingOverlay() {
+                loadingOverlay.classList.remove('hidden');
+                void loadingOverlay.offsetWidth;
+                loadingOverlay.style.opacity = '1';
+                loadingOverlay.style.visibility = 'visible';
+            }
+
+            function hideLoadingOverlay() {
+                loadingOverlay.classList.add('hidden');
+                loadingOverlay.style.opacity = '0';
+                setTimeout(() => {
+                    loadingOverlay.style.visibility = 'hidden';
+                }, 400);
+            }
+
+            function tryHideLoading() {
+                if (gifMinTimePassed && iframeLoaded) {
+                    hideLoadingOverlay();
                 }
             }
+
+            function setChannel(channelId) {
+                const channel = channels[channelId] || channels[1];
+
+                gifMinTimePassed = false;
+                iframeLoaded = false;
+                currentLoadToken++;
+                const myToken = currentLoadToken;
+
+                showLoadingOverlay();
+
+                setTimeout(() => {
+                    if (myToken !== currentLoadToken) return;
+                    gifMinTimePassed = true;
+                    tryHideLoading();
+                }, 3000);
+
+                iframe.src = channel.url;
+            }
+
+            iframe.addEventListener('load', function() {
+                iframeLoaded = true;
+                tryHideLoading();
+            });
 
             function getChannelFromHash() {
                 const hash = window.location.hash;
@@ -316,25 +313,12 @@
                 id !== null ? setChannel(id) : setChannel(1);
             });
 
-            window.addEventListener('load', function() {
-                loadChannelFromHash();
-                setTimeout(() => {
-                    if (loadingMsg) {
-                        loadingMsg.style.opacity = '0';
-                        setTimeout(() => { loadingMsg.style.display = 'none'; }, 200);
-                    }
-                }, 800);
-            });
-
-            iframe.addEventListener('load', function() {
-                if (loadingMsg) {
-                    loadingMsg.style.opacity = '0';
-                    setTimeout(() => { loadingMsg.style.display = 'none'; }, 200);
-                }
-            });
+            window.addEventListener('load', loadChannelFromHash);
 
             loadChannelFromHash();
+
             window.__channels = channels;
+            window.__setChannel = setChannel;
         })();
     </script>
 </body>
